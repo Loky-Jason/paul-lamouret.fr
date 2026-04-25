@@ -1,2 +1,3 @@
 # Local files that should not be tracked by Git
 claude.md
+.claude/
