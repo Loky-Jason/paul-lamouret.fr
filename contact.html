@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Paul Lamouret | Directeur Créatif & Chef de Projet</title>
+  <meta name="description" content="Contactez Paul Lamouret, Directeur Créatif & Chef de Projet basé à Paris. Ouvert aux collaborations en design, production digitale et développement créatif.">
+  <link rel="canonical" href="https://www.paul-lamouret.fr/contact.html">
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://www.paul-lamouret.fr/contact.html">
+  <meta property="og:title"       content="Contact — Paul Lamouret | Directeur Créatif & Chef de Projet">
+  <meta property="og:description" content="Contactez Paul Lamouret, Directeur Créatif & Chef de Projet basé à Paris. Ouvert aux collaborations.">
+  <meta property="og:image"       content="https://www.paul-lamouret.fr/uploads/Logo-final-e41I.png">
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary">
+  <meta name="twitter:title"       content="Contact — Paul Lamouret | Directeur Créatif & Chef de Projet">
+  <meta name="twitter:description" content="Contactez Paul Lamouret, Directeur Créatif & Chef de Projet basé à Paris.">
+  <link rel="icon" type="image/png" href="./uploads/Logo-final-e41I.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;600&family=Roboto:wght@100;300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="./css/style.css?v=1.0">
+</head>
+<body>
+  <script src="./js/load-navbar.js?v=1.0"></script>
+
+  <!-- ========== HERO CONTACT ========== -->
+  <div class="contact-hero" data-parallax
+       style="background-image: url('./uploads/BannièreContact.png');">
+  </div>
+
+  <!-- ========== INTRO CONTACT ========== -->
+  <section class="section">
+    <div class="container">
+      <div class="contact-main-grid">
+
+        <div style="display:flex; align-items:center; justify-content:center;">
+          <img src="./uploads/photo-contact-paul-Lamouret-1xYf.png"
+               alt="Paul Lamouret" class="contact-photo">
+        </div>
+
+        <div class="contact-intro">
+          <span class="section-eyebrow fade-in">Prenons contact</span>
+          <h1 class="fade-in">Parlons de<br>votre projet</h1>
+          <div class="gold-line" style="margin-top:20px;"></div>
+          <p style="font-size:14px; font-weight:300; color:#666; line-height:1.9; margin-bottom:0;">
+            Vous avez une vision, un concept ou simplement envie d'explorer de nouvelles directions créatives ? <strong>Je suis ouvert aux collaborations</strong> — contactez-moi pour discuter de votre projet.
+          </p>
+
+          <div class="contact-links">
+            <a href="tel:0665658862" class="contact-link-item">
+              <i class="fas fa-phone-alt"></i>
+              <span>06 65 65 88 62</span>
+            </a>
+            <a href="mailto:loky.jason@gmail.com" class="contact-link-item">
+              <i class="fas fa-envelope"></i>
+              <span>loky.jason@gmail.com</span>
+            </a>
+            <span class="contact-link-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Allée de Bellevue, Le Perreux-sur-Marne — 94170</span>
+            </span>
+            <a href="https://fr.linkedin.com/in/paul-lamouret-89ba94174"
+               target="_blank" rel="noopener noreferrer" class="contact-link-item">
+              <i class="fab fa-linkedin-in"></i>
+              <span>LinkedIn</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FORMULAIRE ========== -->
+  <section class="section section-cream">
+    <div class="container">
+      <div class="contact-form-section">
+
+        <div style="display:flex; align-items:center; justify-content:center;">
+          <img src="./uploads/Send-Message-2ujB.png"
+               alt="Envoyer un message" class="form-image">
+        </div>
+
+        <div class="contact-form-col">
+          <span class="section-eyebrow fade-in">Message</span>
+          <h2 class="fade-in">Laissez un<br>message</h2>
+          <div class="gold-line" style="margin-top:16px;"></div>
+
+          <form id="contact-form"
+                action="https://formspree.io/f/xaqajagl"
+                method="POST">
+
+            <div class="form-group">
+              <input type="text" name="Nom" placeholder="Nom *" required>
+            </div>
+            <div class="form-group">
+              <input type="email" name="Email" placeholder="Email *" required>
+            </div>
+            <div class="form-group">
+              <input type="text" name="Objet" placeholder="Objet">
+            </div>
+            <div class="form-group">
+              <textarea name="Message" placeholder="Message *" required></textarea>
+            </div>
+
+            <div style="margin-top:10px;">
+              <button type="submit" class="btn btn-dark">
+                <span>Envoyer le message</span>
+                <i class="fas fa-paper-plane" style="font-size:9px;"></i>
+              </button>
+            </div>
+
+            <p id="form-status"
+               style="display:none; margin-top:20px; font-size:11px;
+                      letter-spacing:2px; text-transform:uppercase;
+                      color:var(--gold-dark, #c17f18);">
+              Message transmis — Merci !
+            </p>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <script>
+    // Formulaire AJAX via Formspree
+    const form = document.getElementById('contact-form');
+    const status = document.getElementById('form-status');
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        form.reset();
+        status.style.display = 'block';
+      }
+    });
+  </script>
+  <script src="./js/scroll-reveal.js?v=1.0"></script>
+  <script src="./js/load-footer.js?v=1.0"></script>
+
+</body>
+</html>

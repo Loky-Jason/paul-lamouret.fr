@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paul Lamouret | Projet</title>
+  <meta name="description" content="Détail d'un projet de Paul Lamouret — Directeur Créatif & Chef de Projet basé à Paris.">
+  <!-- Open Graph (mis à jour dynamiquement si partage) -->
+  <meta property="og:type"        content="article">
+  <meta property="og:site_name"   content="Paul Lamouret — Portfolio">
+  <meta property="og:image"       content="https://www.paul-lamouret.fr/uploads/Logo-final-e41I.png">
+  <!-- Twitter Card -->
+  <meta name="twitter:card"       content="summary_large_image">
+  <link rel="icon" type="image/png" href="./uploads/Logo-final-e41I.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;600&family=Roboto:wght@100;300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="./css/style.css?v=1.0">
+</head>
+<body>
+
+  <script src="./js/load-navbar.js?v=1.0"></script>
+
+  <!-- Contenu injecté dynamiquement -->
+  <main id="detail-root"></main>
+
+  <!-- ===== LIGHTBOX ===== -->
+  <div id="lb" class="lb-overlay" aria-hidden="true" role="dialog" aria-modal="true">
+    <button class="lb-close" id="lb-close" aria-label="Fermer">&#10005;</button>
+    <button class="lb-arrow lb-prev" id="lb-prev" aria-label="Image précédente">&#8592; Préc.</button>
+    <div class="lb-inner" id="lb-inner">
+      <img id="lb-img" class="lb-img" src="" alt="">
+      <span id="lb-caption" class="lb-caption"></span>
+    </div>
+    <button class="lb-arrow lb-next" id="lb-next" aria-label="Image suivante">Suiv. &#8594;</button>
+  </div>
+
+
+  <!-- Données projets -->
+  <script src="./js/projects-data.js?v=1.0"></script>
+
+  <script>
+    // ===== RENDU DÉTAIL =====
+    function getParam(name) {
+      return new URLSearchParams(window.location.search).get(name);
+    }
+
+    function renderBlock(block) {
+      switch (block.type) {
+
+        case 'text':
+          return `<div class="detail-block detail-text">${block.value}</div>`;
+
+        case 'image':
+          return `<figure class="detail-block detail-image">
+            <img src="${block.src}" alt="${block.caption || ''}">
+            ${block.caption ? `<figcaption class="detail-caption">${block.caption}</figcaption>` : ''}
+          </figure>`;
+
+        case 'image-duo':
+          return `<div class="detail-block detail-image-duo">
+            ${block.images.map(img => `
+              <figure>
+                <img src="${img.src}" alt="${img.caption || ''}">
+                ${img.caption ? `<figcaption class="detail-caption">${img.caption}</figcaption>` : ''}
+              </figure>`).join('')}
+          </div>`;
+
+        case 'video': {
+          // youtube-nocookie évite l'Erreur 153 en local (file://) et respecte la vie privée
+          const videoSrc = (block.src + (block.src.includes('?') ? '&' : '?') + 'rel=0')
+            .replace('youtube.com/embed/', 'youtube-nocookie.com/embed/');
+          return `<div class="detail-block detail-video">
+            <div class="detail-video-wrap">
+              <iframe src="${videoSrc}" title="${block.caption || 'Vidéo'}"
+                      allowfullscreen loading="lazy" frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+            </div>
+            ${block.caption ? `<span class="detail-caption" style="padding:0 0 0 0; display:block; margin-top:12px;">${block.caption}</span>` : ''}
+          </div>`;
+        }
+
+        case 'gallery': {
+          const slides = block.images.map(img => `
+            <div class="gallery-slide">
+              <img src="${img.src}" alt="${img.caption || ''}" loading="lazy">
+              ${img.caption ? `<div class="gallery-slide-overlay"><span>${img.caption}</span></div>` : ''}
+            </div>`).join('');
+
+          // ≤ 3 images → grille statique portrait (élégante, sans contrôles)
+          if (block.images.length <= 3) {
+            return `<div class="detail-block detail-gallery-static count-${block.images.length}">
+              ${slides}
+            </div>`;
+          }
+
+          // > 3 images → carrousel avec navigation
+          return `<div class="detail-block detail-gallery" data-gallery>
+            <div class="gallery-viewport">
+              <div class="gallery-track">${slides}</div>
+            </div>
+            <div class="gallery-nav">
+              <div class="gallery-arrows">
+                <button class="gallery-arrow gallery-prev" aria-label="Image précédente">&#8592; Préc.</button>
+                <button class="gallery-arrow gallery-next" aria-label="Image suivante">Suiv. &#8594;</button>
+              </div>
+              <span class="gallery-counter">01 / ${String(block.images.length).padStart(2, '0')}</span>
+            </div>
+          </div>`;
+        }
+
+        case 'quote':
+          return `<blockquote class="detail-block detail-quote">
+            <p>${block.text}</p>
+            ${block.author ? `<cite>${block.author}</cite>` : ''}
+          </blockquote>`;
+
+        default:
+          return '';
+      }
+    }
+
+    // ===== CARROUSEL GALERIE =====
+    function initGalleries() {
+      document.querySelectorAll('[data-gallery]').forEach(function(el) {
+        const track   = el.querySelector('.gallery-track');
+        const slides  = Array.from(el.querySelectorAll('.gallery-slide'));
+        const prevBtn = el.querySelector('.gallery-prev');
+        const nextBtn = el.querySelector('.gallery-next');
+        const counter = el.querySelector('.gallery-counter');
+        let current = 0;
+
+        function getVisible() {
+          if (window.innerWidth <= 600) return 1;
+          if (window.innerWidth <= 900) return 2;
+          return 3;
+        }
+
+        function update() {
+          const visible       = getVisible();
+          const slideW        = slides[0].getBoundingClientRect().width;
+          const gap           = 20;
+          const totalPos      = Math.max(1, slides.length - visible + 1);
+          track.style.transform = `translateX(-${current * (slideW + gap)}px)`;
+          counter.textContent   = `${String(current + 1).padStart(2, '0')} / ${String(totalPos).padStart(2, '0')}`;
+          prevBtn.disabled = current === 0;
+          nextBtn.disabled = current >= slides.length - visible;
+        }
+
+        prevBtn.addEventListener('click', function() { if (current > 0) { current--; update(); } });
+        nextBtn.addEventListener('click', function() {
+          if (current < slides.length - getVisible()) { current++; update(); }
+        });
+        window.addEventListener('resize', function() {
+          current = Math.min(current, Math.max(0, slides.length - getVisible()));
+          update();
+        });
+
+        update();
+      });
+    }
+
+    // ===== LIGHTBOX =====
+    var _lb       = document.getElementById('lb');
+    var _lbImg    = document.getElementById('lb-img');
+    var _lbCap    = document.getElementById('lb-caption');
+    var _lbPrev   = document.getElementById('lb-prev');
+    var _lbNext   = document.getElementById('lb-next');
+    var _lbImages = [];
+    var _lbIndex  = 0;
+
+    function lbShow(i) {
+      _lbIndex          = i;
+      _lbImg.src        = _lbImages[i].src;
+      _lbImg.alt        = _lbImages[i].caption || '';
+      _lbCap.textContent = _lbImages[i].caption || '';
+      _lbPrev.disabled  = (i === 0);
+      _lbNext.disabled  = (i === _lbImages.length - 1);
+    }
+
+    function lbOpen(images, startIndex) {
+      _lbImages = images;
+      lbShow(startIndex);
+      _lb.classList.add('open');
+      _lb.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function lbClose() {
+      _lb.classList.remove('open');
+      _lb.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('lb-close').addEventListener('click', lbClose);
+    _lbPrev.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (_lbIndex > 0) lbShow(_lbIndex - 1);
+    });
+    _lbNext.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (_lbIndex < _lbImages.length - 1) lbShow(_lbIndex + 1);
+    });
+    _lb.addEventListener('click', function(e) {
+      if (e.target === _lb) lbClose();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (!_lb.classList.contains('open')) return;
+      if (e.key === 'Escape')      lbClose();
+      if (e.key === 'ArrowLeft'  && _lbIndex > 0)                    lbShow(_lbIndex - 1);
+      if (e.key === 'ArrowRight' && _lbIndex < _lbImages.length - 1) lbShow(_lbIndex + 1);
+    });
+
+    function initLightboxes() {
+      document.querySelectorAll('.detail-gallery-static, [data-gallery]').forEach(function(container) {
+        var slides = Array.from(container.querySelectorAll('.gallery-slide'));
+        var imgs   = slides.map(function(s) {
+          var imgEl   = s.querySelector('img');
+          var capEl   = s.querySelector('.gallery-slide-overlay span');
+          return {
+            src:     imgEl.getAttribute('src'),
+            caption: capEl ? capEl.textContent : ''
+          };
+        });
+        slides.forEach(function(slide, i) {
+          slide.addEventListener('click', function(e) {
+            e.stopPropagation();
+            lbOpen(imgs, i);
+          });
+        });
+      });
+    }
+
+    function renderNav(project, index) {
+      const prev = index > 0 ? PROJECTS_DATA[index - 1] : null;
+      const next = index < PROJECTS_DATA.length - 1 ? PROJECTS_DATA[index + 1] : null;
+
+      const prevHtml = prev
+        ? `<a href="project-detail.html?id=${prev.id}" class="detail-nav-item nav-prev">
+             <span class="detail-nav-dir">&#8592; Projet précédent</span>
+             <span class="detail-nav-title">${prev.title}</span>
+             <span class="detail-nav-sub">${prev.subtitle}</span>
+           </a>`
+        : `<div class="detail-nav-item nav-prev nav-empty">
+             <span class="detail-nav-dir">&#8592;</span>
+             <span class="detail-nav-title">Premier projet</span>
+           </div>`;
+
+      const nextHtml = next
+        ? `<a href="project-detail.html?id=${next.id}" class="detail-nav-item nav-next">
+             <span class="detail-nav-dir">Projet suivant &#8594;</span>
+             <span class="detail-nav-title">${next.title}</span>
+             <span class="detail-nav-sub">${next.subtitle}</span>
+           </a>`
+        : `<div class="detail-nav-item nav-next nav-empty">
+             <span class="detail-nav-dir">&#8594;</span>
+             <span class="detail-nav-title">Dernier projet</span>
+           </div>`;
+
+      return `<nav class="detail-nav" aria-label="Navigation projets">
+        <div class="detail-nav-grid">
+          ${prevHtml}
+          ${nextHtml}
+        </div>
+      </nav>`;
+    }
+
+    function renderPage(project, index) {
+      const root = document.getElementById('detail-root');
+
+      // Mise à jour <title> et <meta description>
+      document.title = `Paul LAMOURET | ${project.title}`;
+      document.querySelector('meta[name="description"]').content = project.description;
+
+      root.innerHTML = `
+        <!-- HERO -->
+        <div class="detail-hero"
+             style="background-image: url('${project.heroImage}');">
+          <div class="detail-hero-content">
+            <div>
+              <span class="section-eyebrow">${project.category}</span>
+              <h1 class="detail-hero-title">${project.title}</h1>
+              <p class="detail-hero-subtitle">${project.subtitle}</p>
+            </div>
+            <span class="detail-hero-number">${project.number}</span>
+          </div>
+        </div>
+
+        <!-- LIEN RETOUR -->
+        <div class="detail-back">
+          <a href="#" id="back-to-projects">
+            <i class="fas fa-arrow-left" style="font-size:8px;"></i>
+            Tous les projets
+          </a>
+        </div>
+
+        <!-- META STRIP -->
+        <div class="detail-meta">
+          <div class="detail-meta-grid">
+            <div>
+              <span class="detail-meta-label">Catégorie</span>
+              <span class="detail-meta-value">${project.category}</span>
+            </div>
+            <div>
+              <span class="detail-meta-label">Année</span>
+              <span class="detail-meta-value">${project.year}</span>
+            </div>
+            <div>
+              <span class="detail-meta-label">Rôle</span>
+              <span class="detail-meta-value">${project.role}</span>
+            </div>
+            <div>
+              <span class="detail-meta-label">Outils</span>
+              <span class="detail-meta-value">${project.tools}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BLOCS DE CONTENU -->
+        <div class="detail-content">
+          ${project.content.map(renderBlock).join('')}
+        </div>
+
+        <!-- NAVIGATION PREV / NEXT -->
+        ${renderNav(project, index)}
+      `;
+
+      // Initialise les carrousels et la lightbox
+      initGalleries();
+      initLightboxes();
+    }
+
+    // ===== INITIALISATION =====
+    const id = getParam('id');
+    const index = PROJECTS_DATA.findIndex(p => p.id === id);
+
+    if (index === -1) {
+      // Projet introuvable → redirection vers la grille
+      window.location.href = 'projects.html';
+    } else {
+      renderPage(PROJECTS_DATA[index], index);
+    }
+  </script>
+
+  <!-- Gestion du bouton "Tous les projets" pour redirection intelligente -->
+  <script>
+    document.getElementById('back-to-projects').addEventListener('click', function(e) {
+      e.preventDefault();
+
+      // Vérifier d'où on venait
+      const source = localStorage.getItem('projectSource') || 'projects';
+
+      if (source === 'games') {
+        // Retour à games.html
+        window.location.href = 'games.html';
+      } else {
+        // Retour à projects.html avec la pagination sauvegardée
+        window.location.href = 'projects.html';
+      }
+    });
+  </script>
+
+  <script src="./js/load-footer.js?v=1.0"></script>
+
+</body>
+</html>

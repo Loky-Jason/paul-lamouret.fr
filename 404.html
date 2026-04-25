@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page introuvable — Paul Lamouret</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/png" href="./uploads/Logo-final-e41I.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;600&family=Roboto:wght@100;300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="./css/style.css?v=1.0">
+  <style>
+    .page-404 {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px;
+      background: var(--off-white);
+    }
+    .page-404-number {
+      font-family: var(--font-display);
+      font-size: clamp(80px, 15vw, 160px);
+      font-weight: 200;
+      color: var(--gold);
+      letter-spacing: 12px;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+    .page-404-title {
+      font-family: var(--font-display);
+      font-size: clamp(18px, 3vw, 28px);
+      font-weight: 300;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--off-black);
+      margin-bottom: 12px;
+    }
+    .page-404-text {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--grey-mid);
+      margin-bottom: 40px;
+      max-width: 400px;
+    }
+    .page-404-ornament {
+      margin: 24px auto 36px;
+    }
+  </style>
+</head>
+<body>
+  <script src="./js/load-navbar.js?v=1.0"></script>
+
+  <div class="page-404">
+    <div class="page-404-number">404</div>
+    <h1 class="page-404-title">Page introuvable</h1>
+    <div class="page-404-ornament ornament">
+      <div class="ornament-diamond"></div>
+    </div>
+    <p class="page-404-text">Cette page n'existe pas ou a été déplacée. Retournez à l'accueil pour continuer votre navigation.</p>
+    <a href="index.html" class="btn btn-dark">
+      <span>Retour à l'accueil</span>
+      <i class="fas fa-arrow-right" style="font-size:9px;"></i>
+    </a>
+  </div>
+
+  <script src="./js/load-footer.js?v=1.0"></script>
+</body>
+</html>
