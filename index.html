@@ -167,12 +167,12 @@
       var section   = document.createElement('section');
       section.className   = 'section';
       section.style.padding = '0';
+      section.style.overflow = 'hidden';
 
       section.innerHTML =
         '<div class="project-row' + (isReverse ? ' reverse' : '') + '">' +
           '<div class="project-image project-image-link"' +
-               ' style="background-image:url(\'' + project.heroImage + '\');' +
-                        (isReverse ? ' background-position:left center;' : '') + '"' +
+               ' style="background-image:url(\'' + project.heroImage + '\'); background-position:left center;"' +
                ' data-href="project-detail.html?id=' + project.id + '"' +
                ' role="link" tabindex="0"' +
                ' aria-label="Voir le projet ' + project.title + '">' +

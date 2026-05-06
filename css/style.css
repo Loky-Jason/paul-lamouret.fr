@@ -38,6 +38,7 @@ body {
   background: var(--white);
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 img { max-width: 100%; display: block; }
 a { text-decoration: none; color: inherit; }
@@ -427,6 +428,8 @@ ul { list-style: none; }
   grid-template-columns: 1fr 1fr;
   gap: 0;
   align-items: stretch;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 /* Alternance : image à droite */
@@ -435,7 +438,7 @@ ul { list-style: none; }
 
 .project-image {
   background-size: cover;
-  background-position: center;
+  background-position: left center;
   background-repeat: no-repeat;
   min-height: 440px;
   position: relative;
@@ -504,6 +507,7 @@ ul { list-style: none; }
    ============================================= */
 .about-wrapper {
   margin-top: var(--navbar-h);
+  margin-bottom: 60px;
   display: grid;
   grid-template-columns: 1fr;
   gap: 0;
@@ -657,7 +661,7 @@ ul { list-style: none; }
 
 /* Section expertise : cards masonry */
 .about-expertise {
-  padding: 0 60px 40px;
+  padding: 0 60px 80px;
 }
 
 .about-expertise .section-title {
@@ -2015,7 +2019,7 @@ h3:hover {
   .timeline-item-pro { padding-left: 20px; }
   .timeline-item-pro::before { left: -22px; }
   .about-separator { margin: 30px 24px; }
-  .about-expertise { padding: 0 24px 30px; }
+  .about-expertise { padding: 0 24px 50px; }
   .expertise-list { grid-template-columns: 1fr; gap: 16px; }
   .expertise-block { padding: 28px; }
 
@@ -2059,12 +2063,27 @@ h3:hover {
   .timeline-item-pro { padding-left: 18px; }
   .timeline-item-pro::before { left: -20px; }
   .about-separator { margin: 25px 16px; }
-  .about-expertise { padding: 0 16px 25px; }
+  .about-expertise { padding: 0 16px 50px; }
   .about-expertise .section-title { font-size: 24px; }
   .expertise-list { gap: 16px; }
   .expertise-block { padding: 22px; }
 
-  .filter-btn    { padding: 10px 12px; font-size: 9px; letter-spacing: 2px; }
+  /* Filter buttons — improve touch target to meet Apple guidelines (44x44px minimum) */
+  .filter-btn {
+    padding: 12px 14px;
+    font-size: 9px;
+    letter-spacing: 2px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Landscape mode optimization — reduce hero height when viewport height < 500px */
+@media (max-height: 500px) {
+  .hero { min-height: 45vh; }
+  .detail-hero { height: 50vh; }
 }
 
 /* ===== RETOUR EN HAUT ===== */
@@ -2094,3 +2113,11 @@ h3:hover {
   pointer-events: auto;
 }
 #back-to-top:hover { background: var(--gold-dark); }
+
+/* Mobile optimization — reduce spacing to avoid overlap with footer */
+@media (max-width: 600px) {
+  #back-to-top {
+    bottom: 16px;
+    right: 16px;
+  }
+}
