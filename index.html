@@ -23,26 +23,118 @@
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;600&family=Roboto:wght@100;300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="./css/style.css?v=1.0">
-  <!-- Schema.org Person -->
+  <!-- Schema.org — Graphe principal (WebSite + Person + Organization) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Paul Lamouret",
-    "jobTitle": "Directeur Créatif & Chef de Projet",
-    "url": "https://www.paul-lamouret.fr",
-    "sameAs": [
-      "https://fr.linkedin.com/in/paul-lamouret-89ba94174",
-      "https://www.artstation.com/kenji-ashirogy"
-    ],
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Le Perreux-sur-Marne",
-      "postalCode": "94170",
-      "addressCountry": "FR"
-    },
-    "email": "loky.jason@gmail.com",
-    "telephone": "+33665658862"
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://www.paul-lamouret.fr/#website",
+        "url": "https://www.paul-lamouret.fr/",
+        "name": "Paul Lamouret — Portfolio",
+        "description": "Portfolio de Paul Lamouret, Directeur Créatif & Chef de Projet basé à Paris.",
+        "inLanguage": "fr-FR",
+        "publisher": { "@id": "https://www.paul-lamouret.fr/#paul" }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://www.paul-lamouret.fr/#paul",
+        "name": "Paul Lamouret",
+        "givenName": "Paul",
+        "familyName": "Lamouret",
+        "jobTitle": "Directeur Créatif & Chef de Projet",
+        "url": "https://www.paul-lamouret.fr/",
+        "image": "https://www.paul-lamouret.fr/uploads/2023-seAy.png",
+        "description": "Directeur Créatif & Chef de Projet basé à Paris. Pilotage de projets digitaux, luxury branding, motion design et direction créative de jeux vidéo narratifs indépendants.",
+        "sameAs": [
+          "https://fr.linkedin.com/in/paul-lamouret-89ba94174",
+          "https://www.artstation.com/kenji-ashirogy"
+        ],
+        "knowsAbout": [
+          "Direction créative",
+          "Gestion de projet digital",
+          "Motion Design",
+          "UX/UI Design",
+          "Unreal Engine 5",
+          "WebGL",
+          "Game Design",
+          "Luxury Branding",
+          "Production audiovisuelle"
+        ],
+        "alumniOf": [
+          { "@type": "CollegeOrUniversity", "name": "ICAN Design" },
+          { "@type": "CollegeOrUniversity", "name": "Digital Campus" }
+        ],
+        "worksFor": { "@id": "https://www.paul-lamouret.fr/#theproject" },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Le Perreux-sur-Marne",
+          "postalCode": "94170",
+          "addressCountry": "FR"
+        },
+        "email": "mailto:loky.jason@gmail.com",
+        "telephone": "+33665658862"
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://www.paul-lamouret.fr/#theproject",
+        "name": "The Project",
+        "url": "https://www.asso-theproject.com/",
+        "foundingDate": "2018",
+        "founder": { "@id": "https://www.paul-lamouret.fr/#paul" },
+        "description": "Association loi 1901 dédiée au développement de jeux vidéo narratifs indépendants."
+      }
+    ]
+  }
+  </script>
+  <!-- Schema.org — FAQ (rich snippets & moteurs IA) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Qui est Paul Lamouret ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Paul Lamouret est Directeur Créatif & Chef de Projet basé à Paris. Il pilote des projets digitaux complexes — productions immersives 3D temps réel sous Unreal Engine pour des Maisons de luxe — et dirige la création de jeux vidéo narratifs indépendants au sein de l'association The Project."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Quelles sont les expertises de Paul Lamouret ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Direction créative et leadership de production, UX/UI et Motion Design, luxury branding (horlogerie, beauté, WebGL immersif), storytelling et production audiovisuelle, ainsi que le game development sous Unreal Engine 5."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Qu'est-ce que The Project ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Project est une association loi 1901 fondée par Paul Lamouret en 2018, dédiée au développement de jeux vidéo narratifs indépendants. Paul y assure la direction créative, le game design et la production, en coordonnant une équipe d'une douzaine de contributeurs bénévoles."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Quelle est la formation de Paul Lamouret ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Paul est titulaire d'un Mastère Chef de Projet Numérique RNCP Niveau 7 (ICAN Design) et d'un Bachelor Chef de Projet Web RNCP Niveau 6 (Digital Campus)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Comment contacter Paul Lamouret ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Vous pouvez contacter Paul Lamouret par e-mail à loky.jason@gmail.com ou via son profil LinkedIn. Il est basé en région parisienne (Le Perreux-sur-Marne, 94)."
+        }
+      }
+    ]
   }
   </script>
 </head>

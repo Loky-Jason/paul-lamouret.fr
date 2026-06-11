@@ -266,12 +266,94 @@
       </nav>`;
     }
 
+    // ===== INJECTION SCHEMA.ORG (rich snippets & moteurs IA) =====
+    const SITE = 'https://www.paul-lamouret.fr';
+
+    // Convertit un chemin relatif './uploads/x' en URL absolue
+    function absUrl(path) {
+      return path ? path.replace(/^\.\//, SITE + '/') : path;
+    }
+
+    // Construit un VideoObject à partir d'un bloc vidéo YouTube
+    function buildVideoObject(block, project) {
+      const id = (block.src.split('/embed/')[1] || '').split('?')[0];
+      if (!id) return null;
+      return {
+        '@type': 'VideoObject',
+        name: block.caption || project.title,
+        description: project.description,
+        thumbnailUrl: 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg',
+        uploadDate: project.year + '-01-01',
+        embedUrl: 'https://www.youtube.com/embed/' + id,
+        contentUrl: 'https://www.youtube.com/watch?v=' + id
+      };
+    }
+
+    function injectSchema(project) {
+      const isGame   = project.category === 'Jeu Vidéo';
+      const pageUrl  = SITE + '/project-detail.html?id=' + project.id;
+
+      const work = {
+        '@context': 'https://schema.org',
+        '@type': isGame ? 'VideoGame' : 'CreativeWork',
+        '@id': pageUrl,
+        url: pageUrl,
+        name: project.title + ' — ' + project.subtitle,
+        image: absUrl(project.heroImage),
+        description: project.description,
+        datePublished: project.year,
+        inLanguage: 'fr-FR',
+        genre: project.category,
+        keywords: project.tools,
+        creator: { '@type': 'Person', '@id': SITE + '/#paul', name: 'Paul Lamouret' }
+      };
+      if (isGame) {
+        work.gamePlatform = 'PC';
+        work.applicationCategory = 'Game';
+        work.publisher = { '@type': 'Organization', '@id': SITE + '/#theproject', name: 'The Project' };
+      }
+
+      // Vidéos du projet → VideoObject (video rich results)
+      const videos = (project.content || [])
+        .filter(b => b.type === 'video')
+        .map(b => buildVideoObject(b, project))
+        .filter(Boolean);
+      if (videos.length) work.video = videos;
+
+      // Fil d'Ariane — dépend de la provenance (projects.html ou games.html)
+      const fromGames = (localStorage.getItem('projectSource') === 'games');
+      const breadcrumb = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE + '/' },
+          fromGames
+            ? { '@type': 'ListItem', position: 2, name: 'Game Dev', item: SITE + '/games.html' }
+            : { '@type': 'ListItem', position: 2, name: 'Projets', item: SITE + '/projects.html' },
+          { '@type': 'ListItem', position: 3, name: project.title, item: pageUrl }
+        ]
+      };
+
+      // Nettoie une éventuelle injection précédente puis insère
+      document.querySelectorAll('script[data-schema="detail"]').forEach(s => s.remove());
+      [work, breadcrumb].forEach(obj => {
+        const s = document.createElement('script');
+        s.type = 'application/ld+json';
+        s.setAttribute('data-schema', 'detail');
+        s.textContent = JSON.stringify(obj);
+        document.head.appendChild(s);
+      });
+    }
+
     function renderPage(project, index) {
       const root = document.getElementById('detail-root');
 
       // Mise à jour <title> et <meta description>
       document.title = `Paul LAMOURET | ${project.title}`;
       document.querySelector('meta[name="description"]').content = project.description;
+
+      // Injection des données structurées Schema.org
+      injectSchema(project);
 
       root.innerHTML = `
         <!-- HERO -->
