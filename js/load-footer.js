@@ -41,4 +41,9 @@
   btn.addEventListener('click', function () {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+
+  // ===== BANNIÈRE DE CONSENTEMENT (chargée sur toutes les pages) =====
+  var consent = document.createElement('script');
+  consent.src = './js/consent.js?v=1.0';
+  document.body.appendChild(consent);
 })();

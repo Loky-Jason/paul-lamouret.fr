@@ -6,14 +6,30 @@
   <title>Univers Créatif — Paul Lamouret | Game Dev & Projets Personnels</title>
   <meta name="description" content="Projets personnels et créatifs de Paul Lamouret — jeux vidéo narratifs indépendants, expériences digitales et innovations. Fondateur de The Project.">
   <link rel="canonical" href="https://www.paul-lamouret.fr/games.html">
-  <!-- Google tag (gtag.js) -->
+  <!-- Google tag (gtag.js) — Consent Mode v2 (RGPD / CNIL) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-K46004C3VR"></script>
   <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-K46004C3VR');
+  // Consentement REFUSÉ par défaut : aucun cookie de mesure d'audience avant accord explicite
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'wait_for_update': 500
+  });
+
+  // Restaure un consentement déjà accordé lors d'une visite précédente
+  try {
+    if (localStorage.getItem('cookieConsent') === 'granted') {
+      gtag('consent', 'update', { 'analytics_storage': 'granted' });
+    }
+  } catch (e) {}
+
+  gtag('js', new Date());
+  gtag('config', 'G-K46004C3VR', { 'anonymize_ip': true });
   </script>
   <!-- Open Graph -->
   <meta property="og:type"        content="website">
