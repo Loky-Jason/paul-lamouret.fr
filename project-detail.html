@@ -186,6 +186,16 @@
       });
     }
 
+    // ===== GALLERY IMAGE LOADING =====
+    function trackImageLoad(img) {
+      if (img.complete && img.naturalWidth > 0) {
+        img.classList.add('loaded');
+      } else {
+        img.addEventListener('load', function() { this.classList.add('loaded'); });
+        img.addEventListener('error', function() { this.classList.add('loaded'); });
+      }
+    }
+
     // ===== LIGHTBOX =====
     var _lb       = document.getElementById('lb');
     var _lbImg    = document.getElementById('lb-img');
@@ -197,11 +207,13 @@
 
     function lbShow(i) {
       _lbIndex          = i;
+      _lbImg.classList.remove('loaded');
       _lbImg.src        = _lbImages[i].src;
       _lbImg.alt        = _lbImages[i].caption || '';
       _lbCap.textContent = _lbImages[i].caption || '';
       _lbPrev.disabled  = (i === 0);
       _lbNext.disabled  = (i === _lbImages.length - 1);
+      trackImageLoad(_lbImg);
     }
 
     function lbOpen(images, startIndex) {
@@ -243,6 +255,8 @@
         var imgs   = slides.map(function(s) {
           var imgEl   = s.querySelector('img');
           var capEl   = s.querySelector('.gallery-slide-overlay span');
+          trackImageLoad(imgEl);
+          imgEl.setAttribute('loading', 'lazy');
           return {
             src:     imgEl.getAttribute('src'),
             caption: capEl ? capEl.textContent : ''

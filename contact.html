@@ -119,30 +119,32 @@
                 method="POST">
 
             <div class="form-group">
-              <input type="text" name="Nom" placeholder="Nom *" required>
+              <input type="text" name="Nom" placeholder="Nom *" required autocomplete="name">
+              <span class="form-error"></span>
             </div>
             <div class="form-group">
-              <input type="email" name="Email" placeholder="Email *" required>
+              <input type="email" name="Email" placeholder="Email *" required autocomplete="email">
+              <span class="form-error"></span>
             </div>
             <div class="form-group">
-              <input type="text" name="Objet" placeholder="Objet">
+              <input type="text" name="Objet" placeholder="Objet" autocomplete="subject">
             </div>
             <div class="form-group">
-              <textarea name="Message" placeholder="Message *" required></textarea>
+              <textarea name="Message" placeholder="Message *" required autocomplete="off"></textarea>
+              <span class="form-error"></span>
             </div>
 
             <div style="margin-top:10px;">
-              <button type="submit" class="btn btn-dark">
-                <span>Envoyer le message</span>
-                <i class="fas fa-paper-plane" style="font-size:9px;"></i>
+              <button type="submit" class="btn btn-dark" id="form-submit-btn">
+                <span id="form-btn-text">Envoyer le message</span>
+                <i class="fas fa-paper-plane" id="form-btn-icon" style="font-size:9px;"></i>
+                <span id="form-spinner" class="spinner" style="display:none;"></span>
               </button>
             </div>
 
             <p id="form-status"
                style="display:none; margin-top:20px; font-size:11px;
-                      letter-spacing:2px; text-transform:uppercase;
-                      color:var(--gold-dark, #c17f18);">
-              Message transmis — Merci !
+                      letter-spacing:2px; text-transform:uppercase;">
             </p>
           </form>
         </div>
@@ -153,21 +155,113 @@
 
 
   <script>
-    // Formulaire AJAX via Formspree
-    const form = document.getElementById('contact-form');
-    const status = document.getElementById('form-status');
-    form.addEventListener('submit', async e => {
-      e.preventDefault();
-      const res = await fetch(form.action, {
-        method: 'POST',
-        body: new FormData(form),
-        headers: { 'Accept': 'application/json' }
-      });
-      if (res.ok) {
-        form.reset();
+    (function(){
+      var form = document.getElementById('contact-form');
+      var status = document.getElementById('form-status');
+      var btn = document.getElementById('form-submit-btn');
+      var btnText = document.getElementById('form-btn-text');
+      var btnIcon = document.getElementById('form-btn-icon');
+      var spinner = document.getElementById('form-spinner');
+      var fields = {
+        Nom:     form.querySelector('input[name="Nom"]'),
+        Email:   form.querySelector('input[name="Email"]'),
+        Message: form.querySelector('textarea[name="Message"]')
+      };
+
+      function showError(input, msg) {
+        var group = input.closest('.form-group');
+        if (!group) return;
+        var errEl = group.querySelector('.form-error');
+        group.classList.add('has-error');
+        if (errEl) {
+          errEl.textContent = msg;
+          errEl.classList.add('visible');
+        }
+      }
+
+      function clearErrors() {
+        document.querySelectorAll('.form-group.has-error').forEach(function(g) {
+          g.classList.remove('has-error');
+        });
+        document.querySelectorAll('.form-error.visible').forEach(function(e) {
+          e.classList.remove('visible');
+        });
+      }
+
+      function validate() {
+        clearErrors();
+        var valid = true;
+        if (!fields.Nom.value.trim()) {
+          showError(fields.Nom, 'Nom requis');
+          valid = false;
+        }
+        if (!fields.Email.value.trim()) {
+          showError(fields.Email, 'Email requis');
+          valid = false;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.Email.value.trim())) {
+          showError(fields.Email, 'Email invalide');
+          valid = false;
+        }
+        if (!fields.Message.value.trim()) {
+          showError(fields.Message, 'Message requis');
+          valid = false;
+        }
+        return valid;
+      }
+
+      function setLoading(loading) {
+        if (loading) {
+          btn.disabled = true;
+          btnText.textContent = 'Envoi en cours';
+          btnIcon.style.display = 'none';
+          spinner.style.display = 'inline-block';
+        } else {
+          btn.disabled = false;
+          btnText.textContent = 'Envoyer le message';
+          btnIcon.style.display = 'inline-block';
+          spinner.style.display = 'none';
+        }
+      }
+
+      function showStatus(msg, type) {
+        status.textContent = msg;
+        status.className = type;
         status.style.display = 'block';
       }
-    });
+
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        status.style.display = 'none';
+        if (!validate()) return;
+        setLoading(true);
+        try {
+          var res = await fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' }
+          });
+          if (res.ok) {
+            form.reset();
+            showStatus('Message transmis — Merci !', 'success');
+          } else {
+            showStatus('Erreur lors de l\'envoi. Réessayez ou contactez-moi directement par email.', 'error');
+          }
+        } catch (_) {
+          showStatus('Problème réseau. Utilisez le lien email ci-dessus pour me contacter.', 'error');
+        }
+        setLoading(false);
+      });
+
+      // Clear errors on input
+      Object.keys(fields).forEach(function(k) {
+        fields[k].addEventListener('input', function() {
+          var group = this.closest('.form-group');
+          group.classList.remove('has-error');
+          var errEl = group.querySelector('.form-error');
+          if (errEl) errEl.classList.remove('visible');
+        });
+      });
+    })();
   </script>
   <script src="./js/scroll-reveal.js?v=1.0"></script>
   <script src="./js/load-footer.js?v=1.0"></script>

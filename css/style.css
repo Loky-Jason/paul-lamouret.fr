@@ -17,6 +17,7 @@
   --grey-light:    #e8e7e3;
   --grey-mid:      #999896;
   --grey-text:     #555;
+  --error:         #c0392b;
 
   --font-display:  'Oswald', sans-serif;
   --font-body:     'Roboto', sans-serif;
@@ -73,11 +74,13 @@ ul { list-style: none; }
   content: '';
   position: absolute;
   bottom: 0; left: 0;
-  width: 0; height: 1px;
+  width: 100%; height: 1px;
   background: var(--gold);
-  transition: width 0.8s var(--ease);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.8s var(--ease);
 }
-.navbar:hover::after { width: 100%; }
+.navbar:hover::after { transform: scaleX(1); }
 
 /* Logo / Brand */
 .navbar-brand {
@@ -113,15 +116,16 @@ ul { list-style: none; }
   content: '';
   position: absolute;
   bottom: 2px; left: 50%;
-  transform: translateX(-50%);
-  width: 0; height: 1px;
+  transform: translateX(-50%) scaleX(0);
+  width: calc(100% - 40px); height: 1px;
   background: var(--gold);
-  transition: width 0.35s var(--ease);
+  transition: transform 0.35s var(--ease);
+  transform-origin: center;
 }
 .navbar-menu a:hover,
 .navbar-menu a.active { color: var(--white); }
 .navbar-menu a:hover::after,
-.navbar-menu a.active::after { width: calc(100% - 40px); }
+.navbar-menu a.active::after { transform: translateX(-50%) scaleX(1); }
 
 /* Hamburger */
 .hamburger {
@@ -1150,7 +1154,12 @@ ul { list-style: none; }
   height: 360px;
   object-fit: cover;
   display: block;
-  transition: transform 0.6s var(--ease);
+  transition: transform 0.6s var(--ease), opacity 0.4s var(--ease);
+  opacity: 0;
+  background: var(--grey-light);
+}
+.gallery-slide img.loaded {
+  opacity: 1;
 }
 .gallery-slide:hover img {
   transform: scale(1.04);
@@ -1434,6 +1443,43 @@ ul { list-style: none; }
   display: block;
 }
 
+.form-group.has-error input,
+.form-group.has-error textarea {
+  border-bottom-color: var(--error);
+}
+.form-group.has-error input:focus,
+.form-group.has-error textarea:focus {
+  border-bottom-color: var(--error);
+}
+
+.form-error {
+  display: none;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--error);
+  margin-top: 6px;
+}
+.form-error.visible {
+  display: block;
+}
+
+#form-status.success { color: var(--gold-dark, #c17f18); }
+#form-status.error   { color: var(--error); }
+
+@keyframes spinner {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  display: none;
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spinner 0.6s linear infinite;
+}
+
 /* =============================================
    LIGHTBOX
    ============================================= */
@@ -1482,6 +1528,10 @@ ul { list-style: none; }
   object-fit: contain;
   display: block;
   transition: opacity 0.2s var(--ease);
+  opacity: 0;
+}
+.lb-img.loaded {
+  opacity: 1;
 }
 .lb-caption {
   font-family: var(--font-body);
