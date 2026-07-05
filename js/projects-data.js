@@ -60,7 +60,7 @@ const PROJECTS_DATA = [
       },
       {
         type: 'text',
-        value: `<h3>Production</h3><p><strong>Projet :</strong> Titre indépendant en développement depuis 2023 <br><strong>Équipe :</strong> The Project — 8+ contributeurs <br><strong>Statut :</strong> Développement avancé (2024-2026)</p><p>Je supervise l'intégralité du projet en tant que <strong>Producer et Directeur Créatif</strong> — vision créative, leadership artistique, pilotage technique et gestion de l'équipe interdisciplinaire.</p><a href="https://www.asso-theproject.com/the-broken-timepiece.html" target="_blank" class="detail-link"><span>Découvrir le projet</span><i class="fas fa-arrow-right"></i></a>`
+        value: `<h3>Production</h3><p><strong>Projet :</strong> Titre indépendant en développement depuis 2023 <br><strong>Équipe :</strong> The Project — 8+ contributeurs <br><strong>Statut :</strong> Développement avancé (2024-2026)</p><p>Je supervise l'intégralité du projet en tant que <strong>Producer et Directeur Créatif</strong> — vision créative, leadership artistique, pilotage technique et gestion de l'équipe interdisciplinaire.</p><a href="https://www.asso-theproject.com/the-broken-timepiece.html" target="_blank" rel="noopener noreferrer" class="detail-link"><span>Découvrir le projet</span><i class="fas fa-arrow-right"></i></a>`
       }
     ]
   },
@@ -426,7 +426,7 @@ const PROJECTS_DATA = [
       },
       {
         type: 'text',
-        value: `<h3>Production & Disponibilité</h3><p><strong>Statut :</strong> Projet terminé — Version LTS disponible <br><strong>Durée de jeu :</strong> 35 à 45 minutes <br><strong>Équipe :</strong> The Project — 12 contributeurs <br><strong>Développement :</strong> 2020–2023</p><p>Je supervise l'intégralité du projet en tant que <strong>Producer et Directeur Créatif</strong> — leadership artistique, vision design, pilotage technique et gestion de l'équipe.</p><p>Reliquia est une démo jouable representative de notre capacité à livrer des expériences narratives cohérentes et immersives.</p><a href="https://www.asso-theproject.com/Landing-Page-Reliquia-The-Immortality-Stone.html" target="_blank" class="detail-link"><span>Découvrir le projet</span><i class="fas fa-arrow-right"></i></a>`
+        value: `<h3>Production & Disponibilité</h3><p><strong>Statut :</strong> Projet terminé — Version LTS disponible <br><strong>Durée de jeu :</strong> 35 à 45 minutes <br><strong>Équipe :</strong> The Project — 12 contributeurs <br><strong>Développement :</strong> 2020–2023</p><p>Je supervise l'intégralité du projet en tant que <strong>Producer et Directeur Créatif</strong> — leadership artistique, vision design, pilotage technique et gestion de l'équipe.</p><p>Reliquia est une démo jouable representative de notre capacité à livrer des expériences narratives cohérentes et immersives.</p><a href="https://www.asso-theproject.com/Landing-Page-Reliquia-The-Immortality-Stone.html" target="_blank" rel="noopener noreferrer" class="detail-link"><span>Découvrir le projet</span><i class="fas fa-arrow-right"></i></a>`
       }
     ]
   },
@@ -664,7 +664,7 @@ const PROJECTS_DATA = [
       },
       {
         type: 'text',
-        value: `<h3>Production & Stratégie Digitale</h3><p><strong>Missions :</strong> <br>— Montage film institutionnel long format <br>— Production de contenus courts (Reels Instagram, 15-60 sec) <br>— Stratégie amplification digitale</p><p><strong>Différenciation par format :</strong> Le film long <strong>contextualise</strong> et <strong>narre</strong> ; les Reels <strong>capturent</strong> les moments forts pour viral potential.</p><p>Les contenus courts sont optimisés pour engagement, partageabilité et algorithme Instagram.</p><a href="https://villagegastronomique.fr/" target="_blank" class="detail-link"><span>Site événement</span><i class="fas fa-arrow-right"></i></a>`
+        value: `<h3>Production & Stratégie Digitale</h3><p><strong>Missions :</strong> <br>— Montage film institutionnel long format <br>— Production de contenus courts (Reels Instagram, 15-60 sec) <br>— Stratégie amplification digitale</p><p><strong>Différenciation par format :</strong> Le film long <strong>contextualise</strong> et <strong>narre</strong> ; les Reels <strong>capturent</strong> les moments forts pour viral potential.</p><p>Les contenus courts sont optimisés pour engagement, partageabilité et algorithme Instagram.</p><a href="https://villagegastronomique.fr/" target="_blank" rel="noopener noreferrer" class="detail-link"><span>Site événement</span><i class="fas fa-arrow-right"></i></a>`
       }
     ]
   },
@@ -687,7 +687,7 @@ const PROJECTS_DATA = [
       },
       {
         type: 'text',
-        value: `<div style="margin-top: 40px; padding-top: 40px; border-top: 1px solid var(--grey-light);"><a href="https://www.vancleefarpels.com/us/en/watches/extraordinary-objects/planetarium-experience.html" target="_blank" class="detail-link"><span>Découvrir l'expérience</span><i class="fas fa-arrow-right"></i></a></div>`
+        value: `<div style="margin-top: 40px; padding-top: 40px; border-top: 1px solid var(--grey-light);"><a href="https://www.vancleefarpels.com/us/en/watches/extraordinary-objects/planetarium-experience.html" target="_blank" rel="noopener noreferrer" class="detail-link"><span>Découvrir l'expérience</span><i class="fas fa-arrow-right"></i></a></div>`
       }
     ]
   },

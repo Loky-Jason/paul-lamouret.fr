@@ -51,7 +51,12 @@ ErrorDocument 404 /404.html
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   # Désactive les fonctionnalités navigateur non utilisées
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+  # Politique de sécurité du contenu (CSP) — 'unsafe-inline' sur script-src accepté car scripts inline utilisés partout dans le site (compromis documenté)
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://formspree.io https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://i.ytimg.com https://www.googletagmanager.com https://*.google-analytics.com; frame-src https://www.youtube.com https://www.youtube-nocookie.com; form-action 'self' https://formspree.io; frame-ancestors 'self'; base-uri 'self'; object-src 'none'"
 </IfModule>
+
+# ===== BLOCAGE FICHIERS SENSIBLES (.git, dotfiles) =====
+RedirectMatch 404 /\.(?!well-known)
 
 # ===== REDIRECTION www → sans www (optionnel) =====
 # Décommenter si ton domaine principal est sans www

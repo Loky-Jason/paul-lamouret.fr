@@ -50,6 +50,23 @@
 - impeccable → audit UI/UX, design critique, polish
 - Vérifier skills disponibles avant de tout faire inline
 
+## Sécurité (audit 2026-07-05)
+
+### Contexte
+Audit sécurité complet du site statique (XSS, headers, CDN, RGPD).
+
+### Problèmes & solutions
+- `target="_blank"` sans `rel="noopener noreferrer"` (reverse tabnabbing) → ajouté partout, y compris dans les template strings de projects-data.js
+- CDN Font Awesome sans SRI → `integrity="sha384-…" crossorigin="anonymous"` sur les 7 pages ; hash calculé depuis le CDN (`curl | openssl dgst -sha384 -binary | openssl base64 -A`), jamais deviné
+- Pas de CSP → ajoutée dans .htaccess ; `'unsafe-inline'` script-src conservé (scripts inline partout — le retirer exigerait un refactor en JS externes)
+- `/.git/` potentiellement servi (déploiement = repo) → `RedirectMatch 404 /\.(?!well-known)`
+
+### Règles
+- Tout `target="_blank"` porte `rel="noopener noreferrer"` — y compris dans les strings JS
+- Tout script/style CDN versionné porte un hash SRI recalculé depuis la source
+- `?id=` URL param : uniquement en lookup (`findIndex`), jamais injecté dans innerHTML
+- Après déploiement, vérifier headers réels : `curl -sI https://www.paul-lamouret.fr` (si absents → serveur nginx, .htaccess ignoré)
+
 ## Windows-specific
 
 - Glob peut ne pas trouver les fichiers avec espaces dans le chemin → utiliser `Get-ChildItem -Recurse` PowerShell
